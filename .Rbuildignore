@@ -1,2 +1,5 @@
 ^discretizeCtsDTMC\.Rproj$
 ^\.Rproj\.user$
+^README\.md$
+^\.gitignore$
+^dev$
