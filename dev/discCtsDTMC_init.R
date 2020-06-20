@@ -54,6 +54,10 @@ devtools::create('~/Documents/Research/discretizeCtsDTMC/discretizeCtsDTMC')
 devtools::document()
 
 
+# Build a draft of the manual.
+devtools::build_manual()
+
+
 
 # Set some folders to be ignored by R build.
 usethis::use_build_ignore(c("README.md", ".gitignore", "dev"))
