@@ -60,7 +60,8 @@ devtools::build_manual()
 
 
 # Set some folders to be ignored by R build.
-usethis::use_build_ignore(c("README.md", ".gitignore", "dev"))
+# usethis::use_build_ignore(c("README.md", ".gitignore", "dev"))
+usethis::use_build_ignore(c("README.md", ".gitignore", "dev", "article"))
 # > usethis::use_build_ignore(c("README.md", ".gitignore", "dev"))
 # check Setting active project to 'C:/Users/le279259/Documents/Research/aggregress/aggregress'
 # check Adding '^README\\.md$', '^\\.gitignore$', '^dev$' to '.Rbuildignore'
