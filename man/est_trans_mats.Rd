@@ -4,16 +4,19 @@
 \alias{est_trans_mats}
 \title{Estimate Transition Matrices}
 \usage{
-est_trans_mats(x, time_stamp, id, n_lags)
+est_trans_mats(x, time_stamp, id, n_lags, Hessian = FALSE)
 }
 \arguments{
 \item{x}{a numeric vector of observations from a discrete random variable.}
 
 \item{time_stamp}{a vector of time stamps that correspond to the observations in \code{x}.}
 
-\item{id}{a vector of labels to identify different individuals in the population}
+\item{id}{a vector of labels to identify different individuals in the population.}
 
 \item{n_lags}{an integer number of lags to define the order of the Markov process.}
+
+\item{Hessian}{an indicator to specify whether the Hessian matrices are returned
+for each column of the transition matrices (default is \code{FALSE}).}
 }
 \value{
 trans_mats an array of transition matrices for the Markov process.

@@ -18,5 +18,6 @@ a categorical variable with states for each variable that
 correspond to elements in the continuous state space.
 }
 \description{
-\code{cut_states}
+\code{cut_states} transforms a variable defined on a continuous state space
+into a discrete variable.
 }

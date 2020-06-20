@@ -12,11 +12,12 @@ forecast_distn(trans_mats, init_probs, n_ahead)
 \item{init_probs}{a numeric probability vector that defines the initial
 proportions of the population in each state.}
 
-\item{n_ahead}{an integer number of lags tat defines the order of the
+\item{n_ahead}{an integer number of lags that defines the order of the
 Markov process.}
 }
 \value{
-
+a \code{n_ahead}-row numeric matrix probability vector that
+defines the forecasted proportions of the population in each state.
 }
 \description{
 \code{forecast_distn} calculates a forecast of a probability distribution

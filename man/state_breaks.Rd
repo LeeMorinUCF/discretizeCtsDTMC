@@ -12,8 +12,9 @@ variable with discontinuities in the distribution function.}
 }
 \value{
 a numeric vector of thresholds for allocating elements of the
-continuous state space to discrete state space.
+continuous state space to a discrete state space.
 }
 \description{
-\code{state_breaks}
+\code{state_breaks} calculates a vector of thresholds for allocating
+elements of a continuous state space to a discrete state space
 }
