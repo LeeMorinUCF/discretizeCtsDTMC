@@ -142,7 +142,7 @@ forecast_distn <- function(trans_mats, init_probs, n_ahead) {
 #' @param out_probs a \code{n_ahead}-row numeric matrix probability vector that
 #' defines the forecasted proportions of the population in each state.
 #'
-#' @return a data frame of Kullback-Leibler divergence statistic
+#' @return a data frame of Kullback-Leibler divergence statistics
 #' and p-values from the quantiles of the chi-squared distribution.
 #'
 test_fore_dev <- function(x, time_stamp, id, out_probs) {

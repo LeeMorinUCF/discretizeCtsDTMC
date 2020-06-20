@@ -18,9 +18,11 @@ from the out-of-sample forecast period.}
 defines the forecasted proportions of the population in each state.}
 }
 \value{
-a data frame of Kullback-Leibler divergence statistic
+a data frame of Kullback-Leibler divergence statistics
 and p-values from the quantiles of the chi-squared distribution.
 }
 \description{
-\code{test_fore_dev} does something.
+\code{test_fore_dev} tests for a deviation from a forecasted population
+by calculating the Kullback-Leibler divergence statistic
+and p-values from the quantiles of the chi-squared distribution.
 }

@@ -3,7 +3,7 @@
 \docType{package}
 \name{aaa-discretizeCtsDTMC}
 \alias{aaa-discretizeCtsDTMC}
-\title{Discretize a Continuous-valued Discrete-time Markov Chain}
+\title{Discretize a Continuous-state Discrete-time Markov Chain}
 \description{
 \code{discretizeCtsDTMC} creates a discrete approximation to a Markov
 process defined on a continuous state space in discrete time.

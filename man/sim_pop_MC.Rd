@@ -2,7 +2,7 @@
 % Please edit documentation in R/discCtsDTMC.R
 \name{sim_pop_MC}
 \alias{sim_pop_MC}
-\title{Simulate a Population of Individuals following a Markov Process}
+\title{Simulate a Population of Individuals following a Markov Chain}
 \usage{
 sim_pop_MC(trans_mats, init_probs, n_ahead, n_ind)
 }

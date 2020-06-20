@@ -16,10 +16,10 @@ proportions of the population in each state.}
 Markov process.}
 }
 \value{
-a \code{n_ahead}-row numeric matrix probability vector that
-defines the forecasted proportions of the population in each state.
+a \code{n_ahead}-row numeric matrix of probability vectors that
+define the forecasted proportion of the population in each state at each time.
 }
 \description{
 \code{forecast_distn} calculates a forecast of a probability distribution
-for a population governed by a discrete-stat, discrete-time Markov process.
+for a population governed by a discrete-state, discrete-time Markov process.
 }

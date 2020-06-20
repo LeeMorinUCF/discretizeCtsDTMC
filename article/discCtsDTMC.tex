@@ -73,7 +73,7 @@
   Lealand Morin\\
   Department of Economics\\
   University of Central Florida\\
-  E-mail: \email{Lealand.Morin@ucf.edu}
+  E-mail: \email{Lealand.Morin@ucf.edu} \\
   \phantom{0}\\
   Harry J. Paarsch\\
   Department of Economics\\
@@ -117,7 +117,9 @@
 %be employed. See the {\LaTeX} code for more details.
 % \end{leftbar}
 
-This article illustrates how to creates a discrete approximation to a Markov
+This article illustrates how to create a discrete approximation to
+the distribution function of a population of individuals following 
+   a Markov
   process defined on a continuous state space in discrete time.
   Once the state space is discretized, \pkg{discretizeCtsDTMC} provides tools
   to estimate the transition matrices and analyze the Markov process.
@@ -127,7 +129,36 @@ This article illustrates how to creates a discrete approximation to a Markov
 
 
 % 
-The R packages \citep{R} available for working with Markov chains is as follows...
+There are several R packages \citep{R} available for working with Markov processes. 
+% 
+The packages \pkg{markovchain} \citep{pkg:markovchain} and \pkg{DTMCPack} \citep{pkg:DTMCPack} provide tools for basic computations with Markov chains.  
+% 
+The \pkg{mcmc} is desiggned for working with Monte Carlo Markov Chains. 
+% 
+Packages \pkg{HMM} \citep{pkg:mcmc} and \pkg{depmixS4} \citep{pkg:depmixS4} are designed for fitting Hidden Markov Models. 
+% (We should explain how what we do is different than Hidden Markov Models.) 
+%
+
+There are several packages aimed at specific applications of Markov chains. 
+% 
+Some of these include packges designed for application in health care. 
+There is \pkg{TPmsm} \citep{pkg:TPmsm} for estimating transition probabilities for 3-state progressive disease models and \pkg{heemod} \citep{pkg:heemod} for applying Markov models to health care economic applications. 
+% 
+Aimed at specific applications, some of these packages assume a considerable knowledge of the relevant subject matter and theory behind those applications. 
+% 
+
+The packages \pkg{msm} \citep{pkg:msm} and \pkg{SemiMarkov} \citep{pkg:SemiMarkov} are used for fitting multistate models to panel data, along with \pkg{mstate} \citep{pkg:mstate} for survival analysis applications. 
+These packages are designed to model discrete-state Markov processes in continuous time, with transitions taking place at a stochastic arrival times. 
+
+
+
+
+
+
+
+
+
+
 
 \begin{figure}[H]
   \centering
