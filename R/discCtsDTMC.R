@@ -339,7 +339,7 @@ prob_series <- function(dt, date_list = NULL) {
 #' @param date_list is a list of dates or time index of integers.
 #'
 #' @return a matrix with a series of forecasted probability
-#' vectors in the rows, with one rows for each time stamp in a data frame.
+#' vectors in the rows, with one row for each time stamp in a data frame.
 #' Each forecast is a k-step-ahead forecast starting from the probability
 #' vector on the first date for k from 1 to \code{num_steps}.
 #'
@@ -397,6 +397,57 @@ forecast_k_probs <- function(start_probs, P_hat, num_steps,
 }
 
 
+#' Kullback-Leibler Tests for Divergence between Two Sets of Distributions
+#'
+#'\code{KLD_step} calculates the Kullback-Leibler divergence statistic
+#' to forecast accuracy of k-step-ahead forecasts.
+#'
+#' @param forecast_probs a matrix with a series of forecasted probability
+#' vectors in the rows, with one row for each time stamp in a data frame.
+#' @param observed_probs a matrix with a series of probability
+#' vectors in the rows, with one rows for each time stamp in a data frame.
+#' @param num_obs a scalar or vector integer number of sample sizes,
+#' If it is a scalar, it is assumed that the pane is balanced, otherwise,
+#' a vector of sample sizes should be provided for each time stamp.
+#'
+#' @return a data frame of KLD statistics and p-values.
+#'
+KLD_forecast_test <- function(forecast_probs, observed_probs, num_obs) {
+
+  date_list <- rownames(forecast_probs)
+  num_groups <- ncol(forecast_probs)
+
+  if (length(num_obs) == 1) {
+    num_obs <- rep(num_obs, length(date_list))
+  }
+
+  # Store KLD statistics from in-sample period.
+  KL_stats <- data.frame(time = date_list,
+                         KLD_stat = -7,
+                         p_value = -7)
+
+  for (date_num in 1:length(date_list)) {
+
+    # Obtain the observed probability vector for this month.
+    p_hat <- observed_probs[date_num, ]
+
+    # Obtain the forecast probability vector for this month.
+    p_tilde <- forecast_probs[date_num, ]
+
+    # Calculate KL statistic for each date.
+    KLD_stat <- 2*num_obs[date_num]*sum(p_tilde * log(p_tilde/p_hat))
+    KL_stats[date_num, 'KLD_stat'] <- KLD_stat
+
+  }
+
+  # Calculate p-values vs. Chi-squared distribution.
+  KL_stats[, 'p_value'] <- 1 - pchisq(q = KL_stats[, 'KLD_stat'],
+                                          df = num_groups - 1)
+
+  return(KL_stats)
+}
+
+
 #' Goodness of Fit Tests in Sample
 #'
 #'\code{KLD_gof_1step} calculates the Kullback-Leibler divergence statistic
@@ -410,7 +461,7 @@ forecast_k_probs <- function(start_probs, P_hat, num_steps,
 #' the third dimension of \code{P_hat}, if \code{P_hat} is an array,
 #' for selecting the relevant transition matrix for each time in \code{date_list}.
 #'
-#' @return
+#' @return a data frame of KLD statistics and p-values.
 #'
 #' @note: Functionality for different date types not implemented.
 #'
@@ -463,7 +514,7 @@ KLD_gof_1step <- function(dt, P_hat, date_list, mat_num_list) {
     # Could pull this from output using the prob_series function.
 
     # Advance prediction one more unit.
-    # Calculate for both fixed-matrix and seasonal model.
+    # Calculate for either fixed-matrix or seasonal model.
     p_tilde <- P_hat_sel %*% p_tilde
 
     # Calculate KL statistic for each date.
