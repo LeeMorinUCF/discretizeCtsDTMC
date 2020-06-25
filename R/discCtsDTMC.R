@@ -277,6 +277,94 @@ forecast_distn <- function(trans_mats, init_probs, n_ahead) {
 }
 
 
+
+
+#' Goodness of Fit Tests in Sample
+#'
+#'\code{KLD_gof_1step} calculates the Kullback-Leibler divergence statistic
+#' to measure the goodness of fit of the 1-step-ahead forecasts with a set of
+#' transition matrices.
+#'
+#' @param dt is a \code{data.table}
+#' @param P_hat an array or matrix of transition matrices.
+#' @param date_list is a list of dates or time index of integers.
+#' @param mat_num_list is a list of integers representing the index number of
+#' the third dimension of \code{P_hat}, if \code{P_hat} is an array,
+#' for selecting the relevant transition matrix for each time in \code{date_list}.
+#'
+#' @return
+#'
+#' @note: Functionality for different date types not implemented.
+#'
+KLD_gof_1step <- function(dt, P_hat, date_list, mat_num_list) {
+
+  sel_date <- date_list[2] # Fix it later.
+  # sel_date <- start_time
+
+  # Prime probability vector with histogram from last month.
+  bal_probs_start_mo <- table(dt[sample_sel == TRUE &
+                                   time == as.Date(sel_date),
+                                 c('x_disc')])
+  num_groups <- dim(P_hat)[1]
+  bal_probs_start_mo <- bal_probs_start_mo/sum(bal_probs_start_mo)
+  p_hat <- matrix(bal_probs_start_mo, nrow = num_groups, ncol = 1)
+  # Note that for one-step-ahead forecasts we are forecasting from
+  # the actual distribution from last period.
+
+  # Store KLD statistics from in-sample period.
+  KL_stats_gof <- data.frame(time = date_list,
+                             KLD_stat = -7,
+                             p_value = -7)
+
+  for (date_num in 3:length(date_list)) {
+
+    # Select observations for this month.
+    sel_date <- date_list[date_num]
+    dt[, sel_obsns_mo := sample_sel & time == as.Date(sel_date)]
+
+    # Select index of relevant transition matrix, if variable over time.
+    if (length(dim(P_hat)) == 3) {
+      mat_num <- mat_num_list[date_num]
+      P_hat_sel <- P_hat[, , mat_num]
+    } else {
+      mat_num <- NA
+      P_hat_sel <- P_hat
+      if(length(mat_num_list) > 1) {
+        warning('Vector of matrix numbers provided but P_hat is a single matrix.')
+      }
+    }
+
+
+    # Prime probability vector with histogram from last month.
+    p_tilde <- p_hat
+
+    # Obtain the actual histogram for this month.
+    bal_freq_mo <- table(dt[sel_obsns_mo == TRUE, c('x_disc')])
+    bal_probs_mo <- bal_freq_mo/sum(bal_freq_mo)
+    p_hat <- as.matrix(bal_probs_mo, nrow = num_groups, ncol = 1)
+
+    # Advance prediction one more unit.
+    # Calculate for both fixed-matrix and seasonal model.
+    p_tilde <- P_hat_sel %*% p_tilde
+
+    # Calculate KL statistic for each date.
+    KLD_stat <- 2*sum(bal_freq_mo)*sum(p_tilde * log(p_tilde/p_hat))
+    KL_stats_gof[date_num, 'KLD_stat'] <- KLD_stat
+
+
+  }
+
+  # Calculate p-values vs. Chi-squared distribution.
+  KL_stats_gof[, 'p_value'] <- 1 - pchisq(q = KL_stats_gof[, 'KLD_stat'],
+                                               df = num_groups - 1)
+
+  return(KL_stats_gof)
+}
+
+
+
+
+
 #' Test for a Deviation from Forecasted Population
 #'
 #'\code{test_fore_dev} tests for a deviation from a forecasted population
