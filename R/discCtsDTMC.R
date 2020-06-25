@@ -279,6 +279,124 @@ forecast_distn <- function(trans_mats, init_probs, n_ahead) {
 
 
 
+#' Compute a Time Series of Probability Vectors.
+#'
+#' \code{prob_series} calculates a matrix with a series of probability
+#' vectors in the rows, with one rows for each time stamp in a data frame.
+#'
+#' @param dt is a \code{data.table}
+#' @param date_list is a list of dates or time index of integers.
+#'
+#' @return a matrix with a series of probability
+#' vectors in the rows, with one rows for each time stamp in a data frame.
+#'
+#'
+prob_series <- function(dt, date_list = NULL) {
+
+
+  # If date_list missing, set equal to all time stamps.
+  if(is.null(date_list)) {
+    date_list <- unique(dt[, time])
+  }
+  num_dates <- length(date_list)
+
+  # Initialize matrix for forecasts.
+  x_labels <- levels(dt[, x_disc])
+  num_groups <- length(x_labels)
+  observed_probs <- data.frame(matrix(0, nrow = num_dates,
+                                      ncol = num_groups))
+  rownames(observed_probs) <- date_list
+  colnames(observed_probs) <- x_labels
+
+  for (date_num in 1:num_dates) {
+
+    # Select observations for this month.
+    sel_date <- date_list[date_num]
+    dt[, sel_obsns_mo := sample_sel & time == as.Date(sel_date)]
+
+
+    # Obtain the actual histogram for this month.
+    bal_freq_mo <- table(dt[sel_obsns_mo == TRUE, x_disc])
+    bal_probs_mo <- bal_freq_mo/sum(bal_freq_mo)
+    p_hat <- as.matrix(bal_probs_mo, nrow = num_groups, ncol = 1)
+
+    # Reord the activity for each month.
+    observed_probs[sel_date, ] <- p_hat
+
+  }
+
+  return(observed_probs)
+}
+
+
+
+#' Compute a Time Series of Probability Vectors.
+#'
+#' \code{forecast_k_probs} calculates a matrix with a series of probability
+#' vectors in the rows, with one rows for each time stamp in a data frame.
+#'
+#' @param start_probs is a probability vector from which the forecasts will satrt.
+#' @param date_list is a list of dates or time index of integers.
+#'
+#' @return a matrix with a series of forecasted probability
+#' vectors in the rows, with one rows for each time stamp in a data frame.
+#' Each forecast is a k-step-ahead forecast starting from the probability
+#' vector on the first date for k from 1 to \code{num_steps}.
+#'
+#'
+forecast_k_probs <- function(start_probs, P_hat, num_steps,
+                           date_list = NULL, mat_num_list = NULL) {
+
+  # If date_list missing, set number of forecasts.
+  if(is.null(date_list)) {
+    date_list <- seq(num_steps)
+  }
+  num_dates <- length(date_list)
+
+  # Initialize matrix for forecasts.
+  x_labels <- names(start_probs)
+  num_groups <- length(x_labels)
+  forecast_probs <- data.frame(matrix(0, nrow = num_dates,
+                                      ncol = num_groups))
+  rownames(forecast_probs) <- date_list
+  colnames(forecast_probs) <- x_labels
+
+
+  # Initialize probability vector with first start_probs.
+  p_tilde <- as.matrix(as.numeric(start_probs, nrow = num_groups, ncol = 1))
+  forecast_probs[1, ] <- p_tilde
+  for (date_num in 2:length(date_list)) {
+
+
+    # Select index of relevant transition matrix, if variable over time.
+    if (length(dim(P_hat)) == 3) {
+      mat_num <- mat_num_list[date_num]
+      P_hat_sel <- P_hat[, , mat_num]
+    } else {
+      mat_num <- NA
+      P_hat_sel <- P_hat
+      if(length(mat_num_list) > 1) {
+        warning('Vector of matrix numbers provided but P_hat is a single matrix.')
+      }
+    }
+
+    # Advance prediction one more unit.
+    # Calculate for both fixed-matrix and seasonal model.
+    # print(p_tilde)
+    # print(class(p_tilde))
+    # print(class(P_hat_sel))
+    p_tilde <- P_hat_sel %*% p_tilde
+
+    # Reord the forecast for each time period.
+    forecast_probs[date_num, ] <- p_tilde
+
+  }
+
+
+  return(forecast_probs)
+}
+
+
 #' Goodness of Fit Tests in Sample
 #'
 #'\code{KLD_gof_1step} calculates the Kullback-Leibler divergence statistic
@@ -342,6 +460,7 @@ KLD_gof_1step <- function(dt, P_hat, date_list, mat_num_list) {
     bal_freq_mo <- table(dt[sel_obsns_mo == TRUE, c('x_disc')])
     bal_probs_mo <- bal_freq_mo/sum(bal_freq_mo)
     p_hat <- as.matrix(bal_probs_mo, nrow = num_groups, ncol = 1)
+    # Could pull this from output using the prob_series function.
 
     # Advance prediction one more unit.
     # Calculate for both fixed-matrix and seasonal model.
