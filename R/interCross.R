@@ -1,12 +1,13 @@
 
-#' Discretize a Continuous-state Discrete-time Markov Chain
+#' Intervention analysis using the cross section of a wide panel
 #'
-#' \code{discretizeCtsDTMC} creates a discrete approximation to a Markov
+#' \code{interCross} uses the variation of successive observations in the
+#' cross section of a wide panel to identify the law of motion
+#' for conduction an intervention analysis.
+#' \code{interCross} creates a discrete approximation to a low-order Markov
 #' process defined on a continuous state space in discrete time.
-#' Once the state space is discretized, \code{discretizeCtsDTMC} provides tools
+#' Once the state space is discretized, \code{interCross} provides tools
 #' to estimate the transition matrices and analyze the Markov process.
-#'
-#' @note We'll think of a better name later.
 #'
 #' @seealso \code{multinom} function in \code{nnet} package for estimating the
 #' transition matrices.
@@ -14,7 +15,7 @@
 #' model once the continuous state space is discretized.
 #'
 #' @docType package
-#' @name aaa-discretizeCtsDTMC
+#' @name aaa-interCross
 NULL
 
 

@@ -1,5 +1,5 @@
-Package: discretizeCtsDTMC
-Title: Discretize a Continuous-valued Discrete-time Markov Chain
+Package: interCross
+Title: Intervention analysis using the cross section of a wide panel
 Version: 0.0.0.9000
 Authors@R: 
     person(given = "Lee",
@@ -7,15 +7,19 @@ Authors@R:
            role = c("aut", "cre"),
            email = "lee.morin.dev@gmail.com",
            comment = c(ORCID = "0000-0001-8539-1386"))
-Description: Package discretizeCtsDTMC creates a discrete approximation to a Markov
+Description: Package interCross uses the variation of successive 
+  observations in the 
+  cross section of a wide panel to identify the law of motion 
+  for conduction an intervention analysis.
+  interCross creates a discrete approximation to a Markov
   process defined on a continuous state space in discrete time.
-  Once the state space is discretized, discretizeCtsDTMC provides tools
+  Once the state space is discretized, interCross provides tools
   to estimate the transition matrices and analyze the Markov process.
-  It is used to model a population of individuals, each following a  
-  continuous-state Markov process in discrete time.
+  It is used to model a population of individuals in a wide panel,  
+  each following a continuous-state Markov process in discrete time.
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.0.2
+RoxygenNote: 7.1.1
 Suggests: 
     testthat
