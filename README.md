@@ -1,2 +1,2 @@
-# discretizeCtsDTMC
-Tools for discretizing a continuous-valued discrete-time Markov chain model
+# The ```interCross``` Package
+Intervention analysis using the cross section of a wide panel
